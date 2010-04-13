@@ -1,1 +1,1 @@
-require File.dirname(__FILE__) + "/../lib/resque-worker-access-from-job.rb"
+require File.dirname(__FILE__) + "/../lib/resque-access_worker_from_job.rb"

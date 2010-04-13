@@ -1,4 +1,4 @@
-= Resque-WorkerAccessFromJob
+= Resque-AccessWorkerFromJob
 
 Small plugin appending the calling worker to the argument list received by the +perform+ method of Resque jobs.  Developed against Resque 1.8.0.
 
