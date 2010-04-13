@@ -1,16 +1,31 @@
-= resque-worker-access-from-job
+= Resque-WorkerAccessFromJob
 
-Description goes here.
+Small plugin appending the calling worker to the argument list received by the +perform+ method of Resque jobs.  Developed against Resque 1.8.0.
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+Purpose: this allows jobs to access shared sockets in the parent worker.
+
+=== Warning
+Be careful to note that each job forks before running, so ivars will be a COPY and, if changed,
+their changes won't persist into the next job's perform method.  However, since sockets ARE persisted, this
+allows multiple jobs to share a single persistent socket kept alive in the worker.
+
+=== Only running in certain workers
+As additional functionality, this plugin can also abort a job gracefully if it's picked up by the wrong worker 
+class, which is useful if you've subclassed Resque::Worker to add your own functionality and need to ensure
+your jobs aren't accidentally run against the original superclass.
+
+== Usage
+To use, add 
+
+ extend Resque::Plugins::AccessWorkerFromJob
+
+to the class with the perform method.
+
+To implement the additional requiring-certain-worker-class feature, add 
+
+ self.required_worker_class = 'ClassName'
+
+as well.
 
 == Copyright
 
