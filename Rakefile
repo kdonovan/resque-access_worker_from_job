@@ -10,7 +10,7 @@ begin
     gem.email = "kali.donovan@gmail.com"
     gem.homepage = "http://github.com/kdonovan/resque-access_worker_from_job"
     gem.authors = ["Kali Donovan"]
-    gem.add_dependency "resque", ">1.8"
+    gem.add_dependency "resque", ">=1.8"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
