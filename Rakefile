@@ -5,12 +5,12 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "resque-worker-access-from-job"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Resque plugin to allow jobs access to their calling worker at runtime.}
+    gem.description = %Q{By allowing multiple jobs to share a single socket, which is persisted over the life of the worker, this plugin is an important building block for implementing a Resque-based service send background iPhone messages via the Apple Push Notification servers.}
     gem.email = "kali.donovan@gmail.com"
     gem.homepage = "http://github.com/kdonovan/resque-worker-access-from-job"
     gem.authors = ["Kali Donovan"]
-    gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_dependency "resque", ">1.8"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
