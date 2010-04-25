@@ -1,1 +1,2 @@
-require File.expand_path(File.dirname(__FILE__)) + "/resque/plugins/access_worker_from_job.rb"
+require "resque/plugins/access_worker_from_job"
+require "resque/monkeypatches/job"

@@ -1,5 +1,3 @@
-require File.expand_path(File.dirname(__FILE__)) + '/../job'
-
 module Resque  
   module Plugins # :nodoc:
     # Adds a Resque plugin to allow jobs to access the worker running them via a cleverly-named +worker+ 

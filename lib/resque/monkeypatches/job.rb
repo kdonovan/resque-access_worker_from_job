@@ -5,5 +5,6 @@ module Resque # :nodoc:
     def args
       @payload['args'] + [worker]
     end
+    
   end
 end
