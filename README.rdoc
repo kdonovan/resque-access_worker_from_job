@@ -2,7 +2,7 @@
 
 Small plugin allowing the +perform+ method of Resque jobs to access the worker running them via the cleverly-named +worker+ instance variable.
 
-Purpose: this allows jobs to access shared sockets in the parent worker.
+Purpose: this allows jobs to access shared sockets in the parent worker, which I needed to implement a persistent TCP connection for {sending  background iPhone messages via Apple's Push Notification Service}[http://github.com/kdonovan/apple_push_notification].
 
 As additional functionality, it can also abort a job gracefully if it's picked up by the wrong worker 
 class, which is useful if you've subclassed Resque::Worker to add your own functionality and need to ensure
