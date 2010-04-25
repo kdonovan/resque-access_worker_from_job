@@ -1,1 +1,1 @@
-require 'lib/resque/plugins/access_worker_from_job'
+require File.expane_path(File.dirname(__FILE__)) + "/resque/plugins/access_worker_from_job.rb"

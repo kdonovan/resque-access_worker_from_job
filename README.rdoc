@@ -1,31 +1,60 @@
 = Resque-AccessWorkerFromJob
 
-Small plugin appending the calling worker to the argument list received by the +perform+ method of Resque jobs.  Developed against Resque 1.8.0.
+Small plugin allowing the +perform+ method of Resque jobs to access the worker running them via the cleverly-named +worker+ instance variable.
 
 Purpose: this allows jobs to access shared sockets in the parent worker.
 
-=== Warning
-Be careful to note that each job forks before running, so ivars will be a COPY and, if changed,
-their changes won't persist into the next job's perform method.  However, since sockets ARE persisted, this
-allows multiple jobs to share a single persistent socket kept alive in the worker.
-
-=== Only running in certain workers
-As additional functionality, this plugin can also abort a job gracefully if it's picked up by the wrong worker 
+As additional functionality, it can also abort a job gracefully if it's picked up by the wrong worker 
 class, which is useful if you've subclassed Resque::Worker to add your own functionality and need to ensure
 your jobs aren't accidentally run against the original superclass.
+
+Developed against Resque 1.8.0.
+
 
 == Usage
 To use, add 
 
  extend Resque::Plugins::AccessWorkerFromJob
 
-to the class with the perform method.
+to the _bottom_ of the class with the perform method (the extend line must come _after_ the perform method has 
+already been defined, or else the alias method will fail). Now your perform method can reference a +worker+
+attribute.
 
-To implement the additional requiring-certain-worker-class feature, add 
+Example:
+
+  class MessageJob
+    @queue = :messages
+    
+    # Example using shared socket from worker (via @worker or self.worker)
+    def self.perform( msg )
+      worker.socket.write( msg )
+    end
+   
+    extend Resque::Plugins::AccessWorkerFromJob
+    self.required_worker_class = 'CustomApplication::MessageSender'
+  end
+
+
+To implement the additional abort-if-picked-up-by-wrong-worker-class feature, add 
 
  self.required_worker_class = 'ClassName'
 
 as well.
+
+
+== Warnings
+=== Argument errors in mixed environments
+Internally, this overrides Resque::Job to append the worker to the argument list passed to any <code>JobClass#perform</code>
+method. For a class that extends Resque::Plugins::AccessWorkerFromJob, this is handled transparently (worker is 
+removed from the argument list and is available via the <code>@worker</code> instance variable, instead).  For mixed environments
+where not all jobs to be run extend AccessWorkerFromJob, and where some of these expect a set number of arguments,
+this may cause problems ("wrong number of arguments" exceptions).
+
+=== Ephemeral nature of worker changes
+Be careful to note that each job forks before running, so instance variables will be a _copy_ and, if changed,
+their changes won't persist into the next job's perform method.  However, since sockets ARE persisted, this
+allows multiple jobs to share a single persistent socket kept alive in the worker.
+
 
 == Copyright
 
