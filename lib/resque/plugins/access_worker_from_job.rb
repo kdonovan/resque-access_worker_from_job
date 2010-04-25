@@ -1,4 +1,17 @@
-module Resque  
+require 'resque' unless defined?(Resque)
+
+module Resque # :nodoc:
+  # Resque-AccessWorkerFromJob plugin overrides the Resque::Job#args method to pass the worker along as the last argument.
+  class Job
+    # Overridden args appends the worker when returning the list of args represented in this job's payload.
+    def args
+      @payload['args'] + [worker]
+    end
+  end
+end
+
+module Resque # :nodoc:
+  
   module Plugins # :nodoc:
     # Adds a Resque plugin to allow jobs to access the worker running them via a cleverly-named +worker+ 
     # instance variable.  Purpose: this allows jobs to access shared sockets in the parent worker.
@@ -55,7 +68,7 @@ module Resque
         if args.last.is_a?(::Resque::Worker)
           self.worker = args.last
         else
-          raise "You must override Resque::Job#args to pass worker as last argument. See README."
+          raise "Resque::Job#args has not been overriden to pass worker as last argument."
         end
         
         if required_worker_class && worker.class.name != required_worker_class
