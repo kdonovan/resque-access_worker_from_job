@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{resque-access_worker_from_job}
-  s.version = "0.2.2"
+  s.version = "0.2.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kali Donovan"]
@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
      "VERSION",
      "init.rb",
      "lib/resque-access_worker_from_job.rb",
-     "lib/resque/monkeypatches/job.rb",
      "lib/resque/plugins/access_worker_from_job.rb",
      "rails/init.rb",
      "resque-access_worker_from_job.gemspec"
