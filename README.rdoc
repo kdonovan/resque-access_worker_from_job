@@ -43,12 +43,6 @@ as well.
 
 
 == Warnings
-=== Argument errors in mixed environments
-Internally, this overrides Resque::Job to append the worker to the argument list passed to any <code>JobClass#perform</code>
-method. For a class that extends Resque::Plugins::AccessWorkerFromJob, this is handled transparently (worker is 
-removed from the argument list and is available via the <code>@worker</code> instance variable, instead).  For mixed environments
-where not all jobs to be run extend AccessWorkerFromJob, and where some of these expect a set number of arguments,
-this may cause problems ("wrong number of arguments" exceptions).
 
 === Ephemeral nature of worker changes
 Be careful to note that each job forks before running, so instance variables will be a _copy_ and, if changed,

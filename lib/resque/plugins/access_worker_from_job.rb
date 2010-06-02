@@ -1,11 +1,15 @@
 require 'resque' unless defined?(Resque)
 
 module Resque # :nodoc:
-  # Resque-AccessWorkerFromJob plugin overrides the Resque::Job#args method to pass the worker along as the last argument.
+  # Resque-AccessWorkerFromJob plugin overrides the Resque::Job#args method to
+  # pass the worker along as the last argument, if the class on which to call perform wants it.
   class Job
+    
     # Overridden args appends the worker when returning the list of args represented in this job's payload.
     def args
-      @payload['args'] + [worker]
+      base_args = @payload['args'] || []
+      base_args << worker if payload_class.respond_to?(:wants_worker_access) && payload_class.wants_worker_access
+      return base_args
     end
   end
 end
@@ -43,12 +47,14 @@ module Resque # :nodoc:
       attr_accessor :required_worker_class, :worker
       
       def self.extended(base)
-        
         unless base.methods.include?('perform')
           raise %Q{You must call "extend Resque::Plugins::AccessWorkerFromJob" AFTER (below) defining the perform method}
         end
         
         class << base
+          def wants_worker_access
+            true
+          end
           
           # Remove worker from last argument, so can write their perform method assuming just the arguments
           # they sent it, without worrying about the appended worker.
