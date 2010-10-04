@@ -47,7 +47,7 @@ module Resque # :nodoc:
       attr_accessor :required_worker_class, :worker
       
       def self.extended(base)
-        unless base.methods.include?('perform')
+        unless base.methods.include?('perform') || base.methods.include?(:perform)
           raise %Q{You must call "extend Resque::Plugins::AccessWorkerFromJob" AFTER (below) defining the perform method}
         end
         
